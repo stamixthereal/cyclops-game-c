@@ -4,6 +4,10 @@
 
 VIP Cyclops is a 2D game developed using SDL2, where the player controls a cyclops character that collects coins while avoiding blockers. The character grows in size each time a coin is collected, and the game ends if the cyclops collides with a blocker. The player can reset the game by clicking the "Play Again" button when the game is over.
 
+## Gameplay Example
+
+![gameplay-example](images/example.png)
+
 ## Requirements
 
 - SDL2
