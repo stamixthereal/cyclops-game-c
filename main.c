@@ -31,6 +31,7 @@ SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *path);
 void resetGame(int *score, bool *gameOver, float *posX, float *posY, SDL_Rect *coinRect, SDL_Rect *blockers);
 bool checkBlockerCollisions(SDL_Rect *rect, SDL_Rect *blockers);
 void updatePlayerSize(SDL_Rect *playerRect, float *posX, float *posY, int newSize);
+void generateBlockers(SDL_Rect *blockers, int numBlockers, SDL_Rect *playerRect, SDL_Rect *coinRect);
 
 int main(int argc, char *argv[])
 {
@@ -81,16 +82,7 @@ int main(int argc, char *argv[])
     SDL_Rect coinRect = {rand() % (SCREEN_WIDTH - COIN_SIZE), rand() % (SCREEN_HEIGHT - COIN_SIZE), COIN_SIZE, COIN_SIZE};
     SDL_Rect blockers[NUM_OF_BLOCKERS];
 
-    for (int i = 0; i < NUM_OF_BLOCKERS; i++)
-    {
-        do
-        {
-            blockers[i].x = rand() % (SCREEN_WIDTH - BLOCKER_SIZE);
-            blockers[i].y = rand() % (SCREEN_HEIGHT - BLOCKER_SIZE);
-            blockers[i].w = BLOCKER_SIZE;
-            blockers[i].h = BLOCKER_SIZE;
-        } while (SDL_HasIntersection(&blockers[i], &playerRect) || SDL_HasIntersection(&blockers[i], &coinRect));
-    }
+    generateBlockers(blockers, NUM_OF_BLOCKERS, &playerRect, &coinRect);
 
     Uint32 lastTick = SDL_GetTicks();
 
@@ -446,4 +438,18 @@ void updatePlayerSize(SDL_Rect *playerRect, float *posX, float *posY, int newSiz
     *posY -= (newSize - playerRect->h) / 2;
     playerRect->x = (int)*posX;
     playerRect->y = (int)*posY;
+}
+
+void generateBlockers(SDL_Rect *blockers, int numBlockers, SDL_Rect *playerRect, SDL_Rect *coinRect)
+{
+    for (int i = 0; i < numBlockers; i++)
+    {
+        do
+        {
+            blockers[i].x = rand() % (SCREEN_WIDTH - BLOCKER_SIZE);
+            blockers[i].y = rand() % (SCREEN_HEIGHT - BLOCKER_SIZE);
+            blockers[i].w = 15 + rand() % 41;
+            blockers[i].h = 15 + rand() % 41;
+        } while (SDL_HasIntersection(&blockers[i], playerRect) || SDL_HasIntersection(&blockers[i], coinRect));
+    }
 }
